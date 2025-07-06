@@ -5,10 +5,6 @@ from funcioneslogicas import *
 tablero = [0, 1, 0, 0, 0 , 3, 0, 0, 0, 0, 0, 1, 0, 0, 2, 1, 1, 0, 0, 0, 1, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0]
 pos_jugador = 15
 
-#notas de cosas para agregar
-#3- sonidos para botones
-#4- imagenes para eventos
-
 def iniciar_juego():
     pygame.init()
 
@@ -21,18 +17,18 @@ def menu_principal():
     fondo_menu = recursos_menu["fondo"]
     fuente = recursos_menu["fuente"]
     pantalla = recursos_menu["pantalla"]
-    boton_si = recursos_menu["boton_si"]
-    boton_no = recursos_menu["boton_no"]
+    boton_jugar = recursos_menu["boton_si"]
+    boton_salir = recursos_menu["boton_no"]
     boton_puntaje = recursos_menu["boton_puntaje"]
     fondo_puntaje = recursos_puntaje["fondo_puntaje"]
 
     reproducir_sonido(recursos_menu["menuBGM"], loop=True)
+    
     usuario = None
-    jugar = False
     ejecucion = True
 
     while ejecucion:
-        dibujar_menu_principal(pantalla, fondo_menu, fuente, boton_si, boton_no, boton_puntaje)
+        dibujar_menu_principal(pantalla, fondo_menu, fuente, boton_jugar, boton_salir, boton_puntaje)
         pygame.display.flip()
 
         eventos = pygame.event.get()
@@ -40,14 +36,15 @@ def menu_principal():
 
         for evento in eventos:
             if evento.type == pygame.MOUSEBUTTONDOWN:
-                if boton_si.collidepoint(evento.pos):
+                if boton_jugar.collidepoint(evento.pos):
                     usuario = pedir_usuario(pantalla, fuente, teclas_cerrar=[pygame.K_ESCAPE])
                     if usuario:
                         ejecucion = False
-                elif boton_no.collidepoint(evento.pos):
+                elif boton_salir.collidepoint(evento.pos):
                     ejecucion = False
                 elif boton_puntaje.collidepoint(evento.pos):
                     mostrar_puntajes_en_pantalla(pantalla, fuente, fondo_puntaje)
+    
     return usuario
 
 def iniciar_tablero(usuario):
@@ -78,7 +75,7 @@ def iniciar_tablero(usuario):
 
             if respuesta == "salir":
                 actualizar_tablero(pantalla_tablero, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
-                finalizar_juego(pantalla_tablero, fuente, pos_jugador, usuario)
+                finalizar_juego(pantalla_tablero, pos_jugador, usuario)
                 ejecutar = False
             else:
                 if respuesta is None:
@@ -86,7 +83,7 @@ def iniciar_tablero(usuario):
                     setear_tiempos(2000)
                     es_correcta = False
                 else:
-                    es_correcta = comparar_respuesta(pregunta_actual, respuesta, pantalla_tablero, fuente,tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
+                    es_correcta = comparar_respuesta(pregunta_actual, respuesta, pantalla_tablero, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
 
                 borrar_pregunta(preguntas, pregunta_actual)
                 pos_jugador = avanzar_casillas(tablero, pos_jugador, es_correcta, pantalla_tablero, fuente,casillas, tablero_imagen, jugador, fondo_tablero)
