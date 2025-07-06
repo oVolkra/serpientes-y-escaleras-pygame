@@ -40,13 +40,14 @@ def leer_puntajes_csv():
     try:
         with open("score.csv", "r", newline="") as archivo:
             lector = csv.reader(archivo, delimiter=';')
-            next(lector)  # Saltar encabezado
+            next(lector)
             for fila in lector:
                 if len(fila) == 2:
                     usuarios.append(fila[0])
                     puntajes.append(int(fila[1]))
     except FileNotFoundError:
         pass
+    
     return usuarios, puntajes
 
 def swap_bubble_sort(listas, i, j):
@@ -191,19 +192,15 @@ def pedir_usuario(pantalla, fuente, teclas_cerrar):
     ingreso_rect = pygame.Rect(230, 280, 300, 40)
     recursos = cargar_recursos_pedir_usuario()
     color_rect = recursos["color_rect"]
-    fuente = recursos["fuente"]
-    mensaje = recursos["mensaje"]
     fondo_usuario = recursos["fondo_usuario"]
 
     ejecucion = True
-    cancelado = False
-    resultado = None
 
     while ejecucion:
         eventos = pygame.event.get()
         if not manejar_eventos_quit(True, eventos, teclas_cerrar=teclas_cerrar):
-            cancelado = True
             ejecucion = False
+            ingreso = None
 
         for evento in eventos:
             if evento.type == pygame.KEYDOWN:
@@ -212,16 +209,17 @@ def pedir_usuario(pantalla, fuente, teclas_cerrar):
                 elif evento.key == pygame.K_BACKSPACE:
                     ingreso = ingreso[:-1]
                 else:
-                    if len(ingreso) < 12:
+                    if ingreso is not None and len(ingreso) < 12:
                         ingreso += evento.unicode
-    
-        dibujar_pantalla_usuario(pantalla, color_rect, ingreso_rect, ingreso, fuente, fondo_usuario)
 
-    if cancelado:
-        resultado = None
+        dibujar_pantalla_usuario(pantalla, color_rect, ingreso_rect, ingreso if ingreso else "", fuente, fondo_usuario)
+
+    if ingreso:
+        ingreso = ingreso
     else:
-        resultado = ingreso
-    return resultado
+        ingreso = None
+    
+    return ingreso
 
 def borrar_pregunta(preguntas, pregunta_respondida):
     """Función encargada de borrar una pregunta ya respondida.
