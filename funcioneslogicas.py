@@ -257,11 +257,9 @@ def manejar_timer_respuesta(segundos, timer_event, teclas_cerrar, pantalla, fuen
                 if segundos <= 0:
                     segundos = 0
                     esperando = False
-
-        if (pantalla is not None and fuente is not None and pregunta_actual is not None and tablero_imagen is not None 
-            and casillas is not None and pos_jugador is not None and jugador is not None and fondo_tablero is not None):
-            dibujar_pantalla_pregunta(pantalla, fuente, tablero_imagen, casillas, pos_jugador, jugador, pregunta_actual, segundos, fondo_tablero)
-
+        
+        dibujar_pantalla_pregunta(pantalla, fuente, tablero_imagen, casillas, pos_jugador, jugador, pregunta_actual, segundos, fondo_tablero)
+    
     pygame.time.set_timer(timer_event, 0)
     resultado = None
     if tecla == "salir":
@@ -270,6 +268,7 @@ def manejar_timer_respuesta(segundos, timer_event, teclas_cerrar, pantalla, fuen
         resultado = None
     else:
         resultado = tecla
+    
     return resultado, segundos
 
 def registrar_respuesta(teclas_cerrar, tiempo_limite, pantalla, fuente, pregunta_actual, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero):
@@ -285,13 +284,12 @@ def registrar_respuesta(teclas_cerrar, tiempo_limite, pantalla, fuente, pregunta
 
     return resultado
 
-def comparar_respuesta(pregunta, respuesta_usuario, pantalla, fuente, tablero, casillas, pos_jugador, jugador, fondo_tablero):
+def comparar_respuesta(pregunta, respuesta_usuario, pantalla, tablero, casillas, pos_jugador, jugador, fondo_tablero):
     """Función encargada de comparar el value del key 'respuesta_correcta' en la lista de diccionarios 'preguntas' con la respuesta del usuario.
     Recibe como parámetros 'pregunta', 'respuesta_usuario', 'pantalla', 'fuente', 'tablero', 'casillas', 'pos_jugador' y 'jugador'.
     Retorna True si la respuesta es correcta, o False en caso contrario."""
     
     actualizar_tablero(pantalla, tablero, casillas, pos_jugador, jugador, fondo_tablero)
-    setear_tiempos(500)
 
     if respuesta_usuario == pregunta["respuesta_correcta"]:
         mensaje = "¡Respuesta correcta!"
@@ -357,14 +355,14 @@ def printear_mensajes(pos_jugador, preguntas, pantalla):
         multimedia_derrota(pantalla)
         escribir_texto(pantalla, "¡TE QUEDASTE SIN PREGUNTAS!", fuente_grande, (0, 550), color = (255, 0, 0))
         
-def finalizar_juego(pantalla, fuente, pos_jugador, usuario, mensaje="¡Fin del juego!", color=(0,0,0), tiempo=2000):
+def finalizar_juego(pantalla, fuente, pos_jugador, usuario, mensaje="¡Fin del juego!", color=(0,0,0)):
     """Función para ejecutar en bloque las funciones que se ejecutan al final de la ejecución.
     Recibe como parámetros 'pantalla', 'fuente', 'pos_jugador', 'usuario', 'mensaje' = "¡Fin del juego!", 'color' = (0,0,0,) y 'tiempo' = 2000."""
     
     mostrar_fin_del_juego(pantalla)
     pygame.display.flip()
     crear_archivo_score(usuario, pos_jugador)
-    setear_tiempos(tiempo)
+    setear_tiempos(2000)
 
 def estado_juego(pos_jugador, preguntas, pantalla, fuente, tablero_imagen, casillas, jugador, usuario, fondo_tablero):
     """Función que evalúa el estado del juego, en caso de llegar a la victoria o derrota.
@@ -379,14 +377,14 @@ def estado_juego(pos_jugador, preguntas, pantalla, fuente, tablero_imagen, casil
     if hay_victoria or hay_derrota or no_hay_preguntas:
         actualizar_tablero(pantalla, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
         printear_mensajes(pos_jugador, preguntas, pantalla)
-        finalizar_juego(pantalla, fuente, pos_jugador, usuario, mensaje="¡Fin del juego!", color=(0,0,0), tiempo=3000)
+        finalizar_juego(pantalla, fuente, pos_jugador, usuario, mensaje="¡Fin del juego!", color=(0,0,0))
         ejecucion = False
 
     else:
         ejecucion = preguntar_seguir_jugando(pantalla, fuente)
         if not ejecucion:
             actualizar_tablero(pantalla, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
-            finalizar_juego(pantalla, fuente, pos_jugador, usuario, mensaje="¡Fin del juego!", color=(0,0,0), tiempo=3000)
+            finalizar_juego(pantalla, fuente, pos_jugador, usuario, mensaje="¡Fin del juego!", color=(0,0,0))
             ejecucion = False
 
     return ejecucion
