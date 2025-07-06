@@ -3,7 +3,7 @@ import os
 
 RUTA_BASE = os.path.dirname(__file__)
 
-def cargar_fuente(tamaño=30, fuente="PixelatedElegance.ttf", negrita=False):
+def cargar_fuente(tamaño=30, fuente="PixelatedElegance.ttf", negrita=True):
     """Función para cargar una fuente de letra.
     Recibe como parámetros el tamaño de fuente y la fuente."""
     
@@ -25,6 +25,7 @@ def escribir_texto(pantalla, texto, fuente, posicion, color=(255, 255, 255), bor
             for dy in [-borde, 0, borde]:
                 if dx != 0 or dy != 0:
                     pantalla.blit(borde_superficie, (rect.x + dx, rect.y + dy))
+    
     pantalla.blit(superficie, rect)
 
 def dibujar_rect(pantalla, color, rect, grosor = 0):
@@ -90,8 +91,8 @@ def cargar_recursos_pedir_usuario():
     fondo_usuario = pygame.image.load(os.path.join(RUTA_BASE, "fondo_usuario.png"))
     color_rect = (251, 252, 252)
     fuente = cargar_fuente()
-    mensaje = ["Ingrese su nombre de usuario", "(12 caracteres max.)"]
-    return {"fondo_usuario": fondo_usuario, "color_rect": color_rect, "fuente": fuente, "mensaje": mensaje}
+
+    return {"fondo_usuario": fondo_usuario, "color_rect": color_rect, "fuente": fuente}
 
 def cargar_recursos_tablero():
     """Función para cargar los recursos de la pantalla del tablero.
@@ -164,4 +165,3 @@ def reproducir_sonido(archivo, tiempo_ms=None, loop=False):
     if tiempo_ms:
         pygame.time.delay(tiempo_ms)
         pygame.mixer.music.stop()
-
