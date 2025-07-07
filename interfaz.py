@@ -32,14 +32,13 @@ def dibujar_pantalla_puntajes(pantalla, fuente, usuarios, puntajes, fondo_puntaj
     Recibe como parámetros 'pantalla', 'fuente', 'usuarios' y 'puntajes'"""
     
     mostrar_imagen(pantalla, fondo_puntajes, posicion=(0, 0), escala=None)
-    escribir_texto(pantalla, "PUNTAJES", fuente, (300, 50), color=(0,0,0))
+    escribir_texto(pantalla, "PUNTAJES", fuente, (300, 50), color=(255,255,255))
     y = 120
     for i in range(len(usuarios)):
         usuario = usuarios[i]
         puntaje = puntajes[i]
         escribir_texto(pantalla, f"{i+1}. {usuario}: {puntaje}", fuente, (100, y))
         y += 40
-    escribir_texto(pantalla, "Presione ESC para volver", fuente, (100, y+40))
     pygame.display.flip()
 
 def dibujar_pantalla_pregunta(pantalla, fuente, tablero, casillas, pos_jugador, jugador, pregunta_actual, segundos, fondo_tablero):
