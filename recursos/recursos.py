@@ -60,7 +60,7 @@ def modelo_jugador(pantalla, casillas, pos_jugador, jugador, escala=(80, 80)):
     
     casilla = casillas[pos_jugador]
     rect = casilla["rect"]
-    x = rect.x + rect.width // 2 - escala[0] // 2
+    x = rect.x + rect.width // 2 -   escala[0] // 2
     y = rect.y + rect.height // 2 - escala[1] // 2
     mostrar_imagen(pantalla, jugador, posicion=(x, y), escala=escala)
 
@@ -165,3 +165,4 @@ def reproducir_sonido(archivo, tiempo_ms=None, loop=False):
     if tiempo_ms:
         pygame.time.delay(tiempo_ms)
         pygame.mixer.music.stop()
+
