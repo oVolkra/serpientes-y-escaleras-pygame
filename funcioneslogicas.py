@@ -77,11 +77,8 @@ def mostrar_puntajes_en_pantalla(pantalla, fuente, fondo_puntajes):
     dibujar_pantalla_puntajes(pantalla, fuente, usuarios, puntajes, fondo_puntajes)
     esperando = True
     while esperando:
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                esperando = False
-            if evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
-                esperando = False
+        eventos = pygame.event.get()
+        esperando = manejar_eventos_quit(esperando, eventos, teclas_cerrar=[pygame.K_ESCAPE])
 
 def actualizar_tablero(pantalla, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero):
     """Función que actualiza el tablero junto con el modelo del jugador, para reflejar el movimiento en el tablero.
@@ -135,6 +132,7 @@ def generar_casilleros(ancho_casilla, alto_casilla, margen_x, margen_y, espacio)
     Retorna las colisiones de las casillas, con su numero de casillero asignado."""
     
     casillas = []
+    
     #fila 1
     for i in range(10):
         x = margen_x + i * (ancho_casilla + espacio)
@@ -235,6 +233,7 @@ def manejar_timer_respuesta(segundos, timer_event, teclas_cerrar, pantalla, fuen
     
     tecla = None
     esperando = True
+    
     pygame.time.set_timer(timer_event, 1000)
     while esperando:
         eventos = pygame.event.get()
@@ -275,12 +274,11 @@ def registrar_respuesta(teclas_cerrar, tiempo_limite, pantalla, fuente, pregunta
     """Función que recibe la respuesta del usuario, dentro del tiempo límite.
     Recibe como parámetros 'teclas_cerrar', 'tiempo_limite', 'pantalla', 'fuente', 'pregunta_actual', 'tablero_imagen', 'casillas', 'pos_jugador', 'jugador' y 'fondo_tablero'.
     Retorna la respuesta del usuario en 'resultado'."""
+    
     segundos = tiempo_limite
     timer_event = pygame.USEREVENT + 10
     resultado, segundos = manejar_timer_respuesta(
-        segundos, timer_event, teclas_cerrar, pantalla, fuente, pregunta_actual,
-        tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero
-    )
+        segundos, timer_event, teclas_cerrar, pantalla, fuente, pregunta_actual, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
 
     return resultado
 
@@ -355,6 +353,29 @@ def printear_mensajes(pos_jugador, preguntas, pantalla):
         multimedia_derrota(pantalla)
         escribir_texto(pantalla, "¡TE QUEDASTE SIN PREGUNTAS!", fuente_grande, (0, 550), color = (255, 0, 0))
         
+def mostrar_puntajes_en_pantalla_final(pantalla, fuente, fondo_puntajes):
+    """Función que crea una ventana de puntajes sin interacción del usuario.
+    Recibe como parámetros 'pantalla', 'fuente' y 'fondo_puntajes'."""
+    
+    usuarios, puntajes = leer_puntajes_csv()
+    bubble_sort_puntajes_desc(usuarios, puntajes)
+    dibujar_pantalla_puntajes(pantalla, fuente, usuarios, puntajes, fondo_puntajes)
+    pygame.display.flip()
+
+def mostrar_puntajes_final():
+    """Función que muestra pantalla de puntajes al finalizar la ejecución del juego.
+    No recibe parámetros."""
+    
+    reiniciar_pantalla()
+    pantalla_puntajes = pygame.display.set_mode((800, 600))
+    recursos_puntaje = cargar_recursos_puntajes()
+    fondo_puntaje = recursos_puntaje["fondo_puntaje"]
+    fuente_puntaje = recursos_puntaje["fuente"]
+    mostrar_puntajes_en_pantalla_final(pantalla_puntajes, fuente_puntaje, fondo_puntaje)
+    setear_tiempos(3000)
+    pygame.quit()
+    exit()
+
 def finalizar_juego(pantalla, fuente, pos_jugador, usuario, mensaje="¡Fin del juego!", color=(0,0,0)):
     """Función para ejecutar en bloque las funciones que se ejecutan al final de la ejecución.
     Recibe como parámetros 'pantalla', 'fuente', 'pos_jugador', 'usuario', 'mensaje' = "¡Fin del juego!", 'color' = (0,0,0,) y 'tiempo' = 2000."""
@@ -363,6 +384,8 @@ def finalizar_juego(pantalla, fuente, pos_jugador, usuario, mensaje="¡Fin del j
     pygame.display.flip()
     crear_archivo_score(usuario, pos_jugador)
     setear_tiempos(2000)
+
+    mostrar_puntajes_final()
 
 def estado_juego(pos_jugador, preguntas, pantalla, fuente, tablero_imagen, casillas, jugador, usuario, fondo_tablero):
     """Función que evalúa el estado del juego, en caso de llegar a la victoria o derrota.
