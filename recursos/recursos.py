@@ -28,6 +28,9 @@ def escribir_texto(pantalla, texto, fuente, posicion, color=(255, 255, 255), bor
     
     pantalla.blit(superficie, rect)
 
+def nombres_ventanas(texto):
+    pygame.display.set_caption(texto)
+
 def dibujar_rect(pantalla, color, rect, grosor = 0):
     """Función para dibujar rects en la pantalla.
     Recibe como parámetros 'pantalla', 'color', 'rect' y 'grosor'."""
