@@ -13,6 +13,7 @@ def menu_principal():
     No recibe parámetros."""
     iniciar_juego()
     recursos_menu = cargar_recursos_menu()
+    nombres_ventanas("Serpientes y escaleras")
     recursos_puntaje = cargar_recursos_puntajes()
     fondo_menu = recursos_menu["fondo"]
     fuente = recursos_menu["fuente"]
@@ -53,6 +54,7 @@ def iniciar_tablero(usuario):
     pygame.mixer.music.stop()
     reiniciar_pantalla()
     recursos = cargar_recursos_tablero()
+    nombres_ventanas("Serpientes y escaleras - Tablero")
     tablero_imagen = recursos["tablero"]
     fuente = recursos["fuente"]
     jugador = recursos["jugador"]
