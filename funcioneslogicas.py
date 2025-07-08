@@ -353,7 +353,7 @@ def printear_mensajes(pos_jugador, preguntas, pantalla):
         multimedia_derrota(pantalla)
         escribir_texto(pantalla, "¡TE QUEDASTE SIN PREGUNTAS!", fuente_grande, (0, 550), color = (255, 0, 0))
         
-def mostrar_puntajes_en_pantalla_final(pantalla, fuente, fondo_puntajes):
+def dibujar_pantalla_puntaje_final(pantalla, fuente, fondo_puntajes):
     """Función que crea una ventana de puntajes sin interacción del usuario.
     Recibe como parámetros 'pantalla', 'fuente' y 'fondo_puntajes'."""
     
@@ -368,10 +368,11 @@ def mostrar_puntajes_final():
     
     reiniciar_pantalla()
     pantalla_puntajes = pygame.display.set_mode((800, 600))
+    nombres_ventanas("Serpientes y escaleras - Puntaje")
     recursos_puntaje = cargar_recursos_puntajes()
     fondo_puntaje = recursos_puntaje["fondo_puntaje"]
     fuente_puntaje = recursos_puntaje["fuente"]
-    mostrar_puntajes_en_pantalla_final(pantalla_puntajes, fuente_puntaje, fondo_puntaje)
+    dibujar_pantalla_puntaje_final(pantalla_puntajes, fuente_puntaje, fondo_puntaje)
     setear_tiempos(3000)
     pygame.quit()
     exit()
