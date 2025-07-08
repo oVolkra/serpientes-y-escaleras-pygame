@@ -65,29 +65,26 @@ def iniciar_tablero(usuario):
     ejecutar = True
 
     while ejecutar:
-        if not preguntas:
-            ejecutar = estado_juego(pos_jugador, preguntas, pantalla_tablero, fuente,tablero_imagen, casillas, jugador, usuario, fondo_tablero)
-        else:
+        actualizar_tablero(pantalla_tablero, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
+        setear_tiempos(300)
+        pregunta_actual = escoger_pregunta_random(preguntas)
+        respuesta = registrar_respuesta(teclas_cerrar=[pygame.K_ESCAPE],tiempo_limite=15,pantalla=pantalla_tablero,fuente=fuente,pregunta_actual=pregunta_actual,tablero_imagen=tablero_imagen,casillas=casillas,pos_jugador=pos_jugador,jugador=jugador,fondo_tablero=fondo_tablero)
+
+        if respuesta == "salir":
             actualizar_tablero(pantalla_tablero, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
-            setear_tiempos(300)
-            pregunta_actual = escoger_pregunta_random(preguntas)
-            respuesta = registrar_respuesta(teclas_cerrar=[pygame.K_ESCAPE],tiempo_limite=15,pantalla=pantalla_tablero,fuente=fuente,pregunta_actual=pregunta_actual,tablero_imagen=tablero_imagen,casillas=casillas,pos_jugador=pos_jugador,jugador=jugador,fondo_tablero=fondo_tablero)
-
-            if respuesta == "salir":
-                actualizar_tablero(pantalla_tablero, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
-                finalizar_juego(pantalla_tablero, pos_jugador, usuario)
-                ejecutar = False
+            finalizar_juego(pantalla_tablero, fuente, pos_jugador, usuario)
+            ejecutar = False
+        else:
+            if respuesta is None:
+                mostrar_resultado(pantalla_tablero, "¡Respuesta incorrecta!",tablero_imagen, casillas, pos_jugador, jugador,(200, 0, 0), fondo_tablero)
+                setear_tiempos(2000)
+                es_correcta = False
             else:
-                if respuesta is None:
-                    mostrar_resultado(pantalla_tablero, "¡Respuesta incorrecta!",tablero_imagen, casillas, pos_jugador, jugador,(200, 0, 0), fondo_tablero)
-                    setear_tiempos(2000)
-                    es_correcta = False
-                else:
-                    es_correcta = comparar_respuesta(pregunta_actual, respuesta, pantalla_tablero, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
+                es_correcta = comparar_respuesta(pregunta_actual, respuesta, pantalla_tablero, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
 
-                borrar_pregunta(preguntas, pregunta_actual)
-                pos_jugador = avanzar_casillas(tablero, pos_jugador, es_correcta, pantalla_tablero, fuente,casillas, tablero_imagen, jugador, fondo_tablero)
-                actualizar_tablero(pantalla_tablero, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
-                ejecutar = estado_juego(pos_jugador, preguntas, pantalla_tablero, fuente,tablero_imagen, casillas, jugador, usuario, fondo_tablero)
+            borrar_pregunta(preguntas, pregunta_actual)
+            pos_jugador = avanzar_casillas(tablero, pos_jugador, es_correcta, pantalla_tablero, fuente,casillas, tablero_imagen, jugador, fondo_tablero)
+            actualizar_tablero(pantalla_tablero, tablero_imagen, casillas, pos_jugador, jugador, fondo_tablero)
+            ejecutar = estado_juego(pos_jugador, preguntas, pantalla_tablero, fuente,tablero_imagen, casillas, jugador, usuario, fondo_tablero)
 
     pygame.quit()
